@@ -1,14 +1,17 @@
 import yaml
 from dataclasses import dataclass, field
 import logging
-from utils import get_default_logger
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 
 @dataclass
 class MasterConfig:
     port: int = field(default=5000)
     debug: bool = field(default=True)
     logger: logging.Logger = field(
-        default=get_default_logger("MasterConfigLogger"), repr=False, compare=False
+        default=logging.getLogger("Master_Server"), repr=False, compare=False
     )
 
     def __post_init__(self):
