@@ -1,0 +1,3 @@
+port: 6000
+debug: true
+node_id: 1

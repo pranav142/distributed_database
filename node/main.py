@@ -1,7 +1,7 @@
 from config import load_config_from_yaml
 from node import Node
 
-CONFIG_PATH = "../configs/node_config.yaml"
+CONFIG_PATH = "../configs/node1_config.yaml"
 
 
 def main():

@@ -10,10 +10,11 @@ logging.basicConfig(
 class NodeConfig:
     port: int = field(default=5000)
     debug: bool = field(default=True)
-    name: str = field(default="Node")
+    name: str = field(default="Node")  
     logger: logging.Logger = field(
         default=logging.getLogger("Node"), repr=False, compare=False
     )
+    node_id: int = field(default=None)
 
     def __post_init__(self):
         if self.debug:
