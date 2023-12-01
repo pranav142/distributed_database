@@ -3,8 +3,8 @@ from utils import is_valid_ip
 
 
 class Handlers:
-    def __init__(self, raft_nodes: list[str], term: int, voted_for: int, reset_election_timer_cb: callable):
-        self.raft_nodes = raft_nodes
+    def __init__(self, peers: list[str], term: int, voted_for: int, reset_election_timer_cb: callable):
+        self.peers = peers
         self.term = term
         self.voted_for = voted_for
         self.reset_election_timer_cb = reset_election_timer_cb
@@ -12,7 +12,7 @@ class Handlers:
     def add_raft_node(self):
         raft_node_ip = request.json.get("ip")
 
-        if raft_node_ip in self.raft_nodes:
+        if raft_node_ip in self.peers:
             return jsonify({"error": "Raft node has already been added to node"}), 409
 
         if raft_node_ip is None:
@@ -21,7 +21,7 @@ class Handlers:
         # if not is_valid_ip(raft_node_ip):
         #     return jsonify({"error": "Invalid raft node ip"}), 400
 
-        self.raft_nodes.append(raft_node_ip)
+        self.peers.append(raft_node_ip)
         return jsonify({"message": "Raft node added successfully"}), 201
 
     def request_vote(self): 

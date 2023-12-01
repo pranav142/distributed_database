@@ -39,10 +39,10 @@ def run_election(
 ) -> bool:
     """performs the election process and returns True if win"""
     num_votes = 1 # person who starts election votes for himself
-    for node in node_ips:
-        response = request_node_vote()
+    for node_ip in node_ips:
+        response = request_node_vote(node_ip, term, candidate_id, last_log_index)
         if response.get("voteGranted", True):
-            votes += 1 
+            num_votes += 1 
     
     num_voters = len(node_ips) + 1
     return num_votes, num_voters

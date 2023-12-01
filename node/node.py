@@ -18,7 +18,7 @@ class Node:
     def __init__(self, config: NodeConfig):
         self.config = config
         self.logger = config.logger
-        self.raft_nodes = []
+        self.peers = config.peers
 
         self.state = RaftState.FOLLOWER
         self.current_term = 0
@@ -27,7 +27,7 @@ class Node:
         self.leader_id = None
         self.votes = 0
 
-        self.handlers = Handlers(self.raft_nodes, self.current_term, self.voted_for, self.reset_election_timer)
+        self.handlers = Handlers(self.peers, self.current_term, self.voted_for, self.reset_election_timer)
         self.app = None
         self.lock = Lock()
 
@@ -49,7 +49,7 @@ class Node:
             self.voted_for = self.config.node_id
 
             num_votes, num_voters = run_election(
-                raft_nodes, self.current_term, self.candidate_id, last_log_index=2
+                self.peers, self.current_term, self.config.node_id, last_log_index=2
             )
 
             if is_election_winner(num_voters=num_voters, num_votes=num_votes):
@@ -76,7 +76,7 @@ class Node:
         app.add_url_rule(
             "/api/request_vote", view_func=self.handlers.request_vote, methods=["POST"]
         )
-        app.add_url_rul(
+        app.add_url_rule(
             "/api/append_entry", view_func=self.handlers.append_entry, methods=["POST"]
         )
         self.app = app
