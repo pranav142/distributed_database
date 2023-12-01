@@ -2,7 +2,7 @@ import os
 import pytest
 import tempfile
 import logging
-from src.config import MasterConfig, load_config_from_yaml
+from master.config import MasterConfig, load_config_from_yaml
 
 
 def test_master_config_defaults():

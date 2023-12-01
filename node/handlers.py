@@ -40,10 +40,10 @@ class Handlers:
         return jsonify({"voteGranted": True, "currentTerm": self.current_term}), 200
 
     def append_entry(self):
-        request.json.get("leader_commit_index") # Integer on whether to commit last append entry
-        request.json.get("index")
-        request.json.get("term")
-        request.json.get("command") # PUT key value, GET key
+        leader_commit_index = request.json.get("leader_commit_index") # Integer on whether to commit last append entry
+        index = request.json.get("index")
+        term = request.json.get("term")
+        command = request.json.get("command") # PUT key value, GET key
 
         
         # put entry in the log if certain case is fulfilled

@@ -1,14 +1,23 @@
-from typing import Protocol
+from typing import Protocol, Optional
 from dataclasses import dataclass, field
-
+from node.command import is_valid_command
 
 @dataclass
 class LogEntry:
-    leader_commit_index: int
     index: int
     term: int
-    command: str
+    leader_commit_index: int
+    command: Optional[str] = None
 
+    def __post_init__(self):
+        if self.leader_commit_index < 0:
+            raise ValueError("leader_commit_index must be non-negative")
+        if self.index < 0:
+            raise ValueError("index must be non-negative")
+        if self.term < 0:
+            raise ValueError("term must be non-negative")
+        if not is_valid_command(self.command):
+            raise ValueError("Invalid command passed")
 
 class RaftLog(Protocol):
     def append_entry(self, entry: LogEntry) -> None:
@@ -51,8 +60,14 @@ class RaftFileLog(RaftLog):
 
 
 def serialize_file_log_entry(entry: LogEntry) -> str:
-    pass
-
+    return f"{entry.index},{entry.term},{entry.leader_commit_index},{entry.command}"
 
 def deserialize_file_log_entry(serialized_entry: str) -> LogEntry:
-    pass
+    args = serialized_entry.split(",")
+    
+    index = int(args[0])
+    term = int(args[1])
+    leader_commit_index = int(args[2])
+    command = args[3] 
+
+    return LogEntry(index=index, term=term, leader_commit_index=leader_commit_index, command=command)
