@@ -1,4 +1,4 @@
-port: 6001
+port: 6060
 debug: true
-node_id: 1
+node_id: 2
 peers: ["127.0.0.1:6000", "127.0.0.1:6002"]

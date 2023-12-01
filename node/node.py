@@ -27,7 +27,7 @@ class Node:
         self.leader_id = None
         self.votes = 0
 
-        self.handlers = Handlers(self.peers, self.current_term, self.voted_for, self.reset_election_timer)
+        self.handlers = Handlers(self.logger, self.peers, self.current_term, self.voted_for, self.reset_election_timer)
         self.app = None
         self.lock = Lock()
 
@@ -37,7 +37,7 @@ class Node:
             self.election_timer.cancel()
 
         # Random timeout between 150ms to 300ms
-        timeout = random.uniform(0.5, 1)
+        timeout = random.uniform(1, 10)
         self.election_timer = Timer(timeout, self.start_election)
         self.election_timer.start()
 

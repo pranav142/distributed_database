@@ -1,25 +1,18 @@
+import argparse
 from config import load_config_from_yaml
 from node import Node
-from threading import Thread
-
-BASE_DIR = "../configs/"
 
 def main():
+    parser = argparse.ArgumentParser(description="Run the server node.")
+    parser.add_argument("-c", "--config", required=True, help="Path to the configuration YAML file.")
+    
+    args = parser.parse_args()
+    config_path = args.config
 
-    threads = []
+    config = load_config_from_yaml(config_path)
+    server = Node(config)
 
-    for i in range(1, 3):
-        config_dir = f"{BASE_DIR}/node{i}_config.yaml"
-        config = load_config_from_yaml(config_dir)
-        node = Node(config)
-
-        thread = Thread(target=node.run)
-        threads.append(thread)
-        thread.start()
-
-    for thread in threads:
-        thread.join()
-
+    server.run()
 
 if __name__ == "__main__":
     main()

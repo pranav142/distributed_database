@@ -26,12 +26,9 @@ def request_node_vote(
         if response.status_code == 200:
             return response.json()
         else:
-            return {
-                "error": f"Received status code {response.status_code}",
-                "message": {response.json()},
-            }
+            return None
     except requests.exceptions.RequestException as e:
-        return {"error": str(e)}
+        return None
 
 
 def run_election(
@@ -41,7 +38,8 @@ def run_election(
     num_votes = 1 # person who starts election votes for himself
     for node_ip in node_ips:
         response = request_node_vote(node_ip, term, candidate_id, last_log_index)
-        if response.get("voteGranted", True):
+        # if response.get("voteGranted", True):
+        if response != None:
             num_votes += 1 
     
     num_voters = len(node_ips) + 1
